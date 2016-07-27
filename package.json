@@ -1,0 +1,22 @@
+{
+  "name": "teraslice_file_chunker",
+  "version": "1.0.0",
+  "description": "a teraslice processor used in tandem with teraslice_hdfs_file_append",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terascope/teraslice_file_chunker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/terascope/teraslice_file_chunker/issues"
+  },
+  "homepage": "https://github.com/terascope/teraslice_file_chunker#readme",
+  "dependencies": {
+    "lodash": "^4.14.0"
+  }
+}
