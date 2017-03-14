@@ -24,7 +24,7 @@ function newProcessor(context, opConfig, jobConfig) {
 
     return function(data) {
         var buckets = {};
-        var currentBucket = [];
+        var currentBucket
 
         var chunks = [];
 
@@ -32,16 +32,13 @@ function newProcessor(context, opConfig, jobConfig) {
         // specified by opConfig.chunk_size
         for (var i = 0; i < data.length; i++) {
             var record = data[i];
-
-            if (opConfig.timeseries) {
-                var incomingDate = formattedDate(record, opConfig);
-                if (!buckets.hasOwnProperty(incomingDate)) {
-                    buckets[incomingDate] = [];
-                }
-
-                currentBucket = buckets[incomingDate];
+            var incomingDate = formattedDate(record, opConfig);
+            
+            if (!buckets.hasOwnProperty(incomingDate)) {
+                buckets[incomingDate] = [];
             }
 
+            currentBucket = buckets[incomingDate];
             currentBucket.push(JSON.stringify(record));
 
             if (currentBucket.length >= opConfig.chunk_size) {
@@ -50,10 +47,7 @@ function newProcessor(context, opConfig, jobConfig) {
                     filename: getFileName(incomingDate, opConfig, config)
                 });
 
-                currentBucket = [];
-                if (opConfig.timeseries) {
-                    buckets[incomingDate] = [];
-                }
+                buckets[incomingDate] = currentBucket = [];
             }
         }
 
@@ -104,8 +98,8 @@ function schema() {
     return {
         timeseries: {
             doc: 'Set to an interval to have directories named using a date field from the data records.',
-            default: '',
-            format: ['daily', 'monthly', 'yearly']
+            default: null,
+            format: ['daily', 'monthly', 'yearly', null]
         },
         date_field: {
             doc: 'Which field in each data record contains the date to use for timeseries. Only useful if "timeseries" is also specified.',
