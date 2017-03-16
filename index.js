@@ -33,7 +33,7 @@ function newProcessor(context, opConfig, jobConfig) {
         for (var i = 0; i < data.length; i++) {
             var record = data[i];
             var incomingDate = formattedDate(record, opConfig);
-            
+
             if (!buckets.hasOwnProperty(incomingDate)) {
                 buckets[incomingDate] = [];
             }
