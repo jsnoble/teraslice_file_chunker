@@ -55,7 +55,7 @@ function newProcessor(context, opConfig, jobConfig) {
         _.forOwn(buckets, function(bucket, key) {
             if (bucket.length > 0) {
                 chunks.push({
-                    data: bucket,
+                    data: bucket.join('\n'),
                     filename: getFileName(key, opConfig, config)
                 });
             }
