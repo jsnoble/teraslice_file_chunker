@@ -24,7 +24,7 @@ function newProcessor(context, opConfig, jobConfig) {
 
     return function(data) {
         var buckets = {};
-        var currentBucket
+        var currentBucket;
 
         var chunks = [];
 
@@ -32,22 +32,27 @@ function newProcessor(context, opConfig, jobConfig) {
         // specified by opConfig.chunk_size
         for (var i = 0; i < data.length; i++) {
             var record = data[i];
-            var incomingDate = formattedDate(record, opConfig);
+            var bucketName = "__single__";
 
-            if (!buckets.hasOwnProperty(incomingDate)) {
-                buckets[incomingDate] = [];
+            // If we're grouping by time we'll need buckets for each date.
+            if (opConfig.timeseries) {
+                bucketName = formattedDate(record, opConfig);
             }
 
-            currentBucket = buckets[incomingDate];
+            if (! buckets.hasOwnProperty(bucketName)) {
+                buckets[bucketName] = [];
+            }
+
+            currentBucket = buckets[bucketName];
             currentBucket.push(JSON.stringify(record));
 
             if (currentBucket.length >= opConfig.chunk_size) {
                 chunks.push({
                     data: currentBucket.join('\n'),
-                    filename: getFileName(incomingDate, opConfig, config)
+                    filename: getFileName(bucketName, opConfig, config)
                 });
 
-                buckets[incomingDate] = currentBucket = [];
+                currentBucket = buckets[bucketName] = [];
             }
         }
 
@@ -78,10 +83,10 @@ function formattedDate(record, opConfig) {
     return date.replace(/-/gi, '.');
 }
 
-function getFileName(date, opConfig, config) {
+function getFileName(name, opConfig, config) {
     var directory = opConfig.directory;
-    if (date) {
-        directory = opConfig.directory + '-' + date;
+    if (name && (name !== "__single__")) {
+        directory = opConfig.directory + '-' + name;
     }
 
     // If filename is specified we default to this
