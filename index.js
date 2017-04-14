@@ -48,7 +48,7 @@ function newProcessor(context, opConfig, jobConfig) {
 
             if (currentBucket.length >= opConfig.chunk_size) {
                 chunks.push({
-                    data: currentBucket.join('\n'),
+                    data: currentBucket.join('\n') + '\n',
                     filename: getFileName(bucketName, opConfig, config)
                 });
 
@@ -60,7 +60,7 @@ function newProcessor(context, opConfig, jobConfig) {
         _.forOwn(buckets, function(bucket, key) {
             if (bucket.length > 0) {
                 chunks.push({
-                    data: bucket.join('\n'),
+                    data: bucket.join('\n') + '\n',
                     filename: getFileName(key, opConfig, config)
                 });
             }
