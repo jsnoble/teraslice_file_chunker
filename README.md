@@ -1,5 +1,7 @@
 # Processor - teraslice_file_chunker
 
+To install from the root of your teraslice instance.
+
 ```
 npm install terascope/teraslice_file_chunker
 ```
