@@ -1,3 +1,9 @@
+# Processor - teraslice_file_chunker
+
+```
+npm install terascope/teraslice_file_chunker
+```
+
 # Description
 
 This processor is used to take an incoming arrary of data and split it into reasonably sized chunks for storage by another module. It was primarily intended for use with `teraslice_hdfs_append` and can be used to write files to a single directory or with timeseries spread writes across directories by date.
